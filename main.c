@@ -123,17 +123,8 @@ int initMod() {
     char modMetadataBuff[8096];
     char formattedDependencies[4096];
     formatDependencies(dependencies, formattedDependencies);
-    int size = sprintf(modMetadataBuff, R"({
-    "name":"%s",
-    "description":"%s",
-    "dependencies":[%s],
-    "youtube": "%s",
-    "platform": "%s",
-    "game":"%s",
-    "custom_textures_path": "custom_textures",
-    "custom_game_files_path": "custom_files",
-    "icon_path": "icon.png"
-    })", title, description, formattedDependencies, youtubeID, platformOpts[platform], gameOpts[game]);
+    //its so nasty im sorry i know raw string literals exist but msvc i cant help it
+    int size = sprintf(modMetadataBuff, "{\n    \"name\":\"%s\",\n    \"description\":\"%s\",\n    \"dependencies\":[%s],\n    \"youtube\": \"%s\",\n    \"platform\": \"%s\",\n    \"game\":\"%s\",\n    \"custom_textures_path\": \"custom_textures\",\n    \"custom_game_files_path\": \"custom_files\",\n    \"icon_path\": \"icon.png\"\n    }", title, description, formattedDependencies, youtubeID, platformOpts[platform], gameOpts[game]);
     fwrite(modMetadataBuff, size, 1, modMetadata);
     fclose(modMetadata);
     FILE* icon = fopen("icon.png", "w");
