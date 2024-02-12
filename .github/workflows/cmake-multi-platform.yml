@@ -46,6 +46,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tagName: app-v__VERSION_
+        releaseName: 'emlctl __VERSION__'
+        releaseBody: ''
+        releaseDraft: true
+        prerelease: false
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
