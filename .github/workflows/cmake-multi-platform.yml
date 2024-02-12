@@ -46,14 +46,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tagName: app-v__VERSION_
-        releaseName: 'emlctl __VERSION__'
-        releaseBody: ''
-        releaseDraft: true
-        prerelease: false
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -75,6 +67,18 @@ jobs:
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }}
+
+    - name: Create Release 
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: ""
+        draft: true
+        prerelease: false
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
